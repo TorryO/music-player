@@ -1,0 +1,164 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #1b1035, #2b0f45);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f2f2f7;
+}
+
+.player {
+  width: min(420px, 92vw);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(8px);
+}
+
+h1 {
+  font-size: 1.1rem;
+  text-align: center;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+.now-playing {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.art {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7c3aed, #db2777);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.meta {
+  min-width: 0;
+}
+
+#trackTitle {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#trackArtist {
+  font-size: 0.85rem;
+  opacity: 0.65;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: #a78bfa;
+  cursor: pointer;
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 18px 0;
+}
+
+.controls button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.controls button:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: scale(1.06);
+}
+
+#playPause {
+  background: #7c3aed;
+  width: 62px;
+  height: 62px;
+  font-size: 1.4rem;
+}
+
+#playPause:hover {
+  background: #8b5cf6;
+}
+
+.volume {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+#playlist {
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+#playlist li {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#playlist li:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#playlist li.active {
+  background: rgba(124, 58, 237, 0.35);
+}
+
+.add-files {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.add-files:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
