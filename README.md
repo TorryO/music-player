@@ -7,8 +7,10 @@ A simple, dependency-free web music player built with HTML, CSS, and vanilla Jav
 - Load multiple audio files from your device
 - Playlist with click-to-play tracks
 - Play / pause, previous / next controls
+- Shuffle mode with play history (previous steps back through what you played)
+- Repeat modes: off → repeat all → repeat one (cycles with the 🔁 button)
 - Seek bar and volume control
-- Keyboard shortcuts: `Space` (play/pause), `←`/`→` (seek 5s)
+- Keyboard shortcuts: `Space` (play/pause), `←`/`→` (seek 5s), `S` (shuffle), `R` (repeat)
 - Auto-advance to the next track when a song ends
 
 ## Usage

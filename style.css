@@ -116,6 +116,36 @@ input[type="range"] {
   background: #8b5cf6;
 }
 
+.extras {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.extras button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 1.05rem;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.extras button:hover {
+  opacity: 0.9;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.extras button.active {
+  opacity: 1;
+  background: rgba(124, 58, 237, 0.4);
+}
+
 .volume {
   display: flex;
   align-items: center;

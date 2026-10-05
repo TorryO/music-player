@@ -10,10 +10,16 @@ const trackTitle = document.getElementById("trackTitle");
 const trackArtist = document.getElementById("trackArtist");
 const currentTimeEl = document.getElementById("currentTime");
 const durationEl = document.getElementById("duration");
+const shuffleBtn = document.getElementById("shuffle");
+const repeatBtn = document.getElementById("repeat");
 
 let tracks = [];
 let currentIndex = -1;
 let seeking = false;
+let shuffle = false;
+let repeatMode = "off"; // "off" | "all" | "one"
+let historyStack = [];
+const REPEAT_ORDER = ["off", "all", "one"];
 
 function formatTime(sec) {
   if (!isFinite(sec) || sec < 0) return "0:00";
@@ -57,14 +63,48 @@ function togglePlay() {
   else audio.pause();
 }
 
-function nextTrack() {
+function nextIndex(auto) {
+  if (!tracks.length) return -1;
+  if (shuffle && tracks.length > 1) {
+    let index;
+    do {
+      index = Math.floor(Math.random() * tracks.length);
+    } while (index === currentIndex);
+    return index;
+  }
+  const next = currentIndex + 1;
+  if (next < tracks.length) return next;
+  // Wrap around unless this is an automatic advance with repeat off
+  if (repeatMode === "all" || auto !== true) return 0;
+  return -1;
+}
+
+function nextTrack(auto) {
   if (!tracks.length) return;
-  loadTrack((currentIndex + 1) % tracks.length, true);
+  const index = nextIndex(auto);
+  if (index === -1) return;
+  if (shuffle && currentIndex >= 0) historyStack.push(currentIndex);
+  loadTrack(index, true);
 }
 
 function prevTrack() {
   if (!tracks.length) return;
-  loadTrack((currentIndex - 1 + tracks.length) % tracks.length, true);
+  // Standard behavior: restart the current track if we're a few seconds in
+  if (audio.currentTime > 3) {
+    audio.currentTime = 0;
+    return;
+  }
+  let index;
+  if (shuffle) {
+    if (!historyStack.length) {
+      audio.currentTime = 0;
+      return;
+    }
+    index = historyStack.pop();
+  } else {
+    index = (currentIndex - 1 + tracks.length) % tracks.length;
+  }
+  loadTrack(index, true);
 }
 
 fileInput.addEventListener("change", (e) => {
@@ -81,8 +121,22 @@ fileInput.addEventListener("change", (e) => {
 });
 
 playPauseBtn.addEventListener("click", togglePlay);
-nextBtn.addEventListener("click", nextTrack);
+nextBtn.addEventListener("click", () => nextTrack());
 prevBtn.addEventListener("click", prevTrack);
+
+shuffleBtn.addEventListener("click", () => {
+  shuffle = !shuffle;
+  if (!shuffle) historyStack = [];
+  shuffleBtn.classList.toggle("active", shuffle);
+  shuffleBtn.title = `Shuffle: ${shuffle ? "on" : "off"}`;
+});
+
+repeatBtn.addEventListener("click", () => {
+  repeatMode = REPEAT_ORDER[(REPEAT_ORDER.indexOf(repeatMode) + 1) % REPEAT_ORDER.length];
+  repeatBtn.textContent = repeatMode === "one" ? "🔂" : "🔁";
+  repeatBtn.classList.toggle("active", repeatMode !== "off");
+  repeatBtn.title = `Repeat: ${repeatMode}`;
+});
 
 audio.addEventListener("play", () => {
   playPauseBtn.textContent = "⏸";
@@ -92,7 +146,14 @@ audio.addEventListener("pause", () => {
   playPauseBtn.textContent = "▶";
   playPauseBtn.title = "Play";
 });
-audio.addEventListener("ended", nextTrack);
+audio.addEventListener("ended", () => {
+  if (repeatMode === "one") {
+    audio.currentTime = 0;
+    play();
+    return;
+  }
+  nextTrack(true);
+});
 
 audio.addEventListener("timeupdate", () => {
   if (seeking) return;
@@ -127,5 +188,9 @@ document.addEventListener("keydown", (e) => {
     audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 5);
   } else if (e.code === "ArrowLeft") {
     audio.currentTime = Math.max(0, audio.currentTime - 5);
+  } else if (e.code === "KeyS") {
+    shuffleBtn.click();
+  } else if (e.code === "KeyR") {
+    repeatBtn.click();
   }
 });
